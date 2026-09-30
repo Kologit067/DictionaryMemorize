@@ -1,0 +1,21 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+*.db
+/.vs/DictionaryMemorize/DesignTimeBuild/.dtbcache
+/.vs/DictionaryMemorize/FileContentIndex
+/.vs/DictionaryMemorize/v15/Server/sqlite3
+/.vs/DictionaryMemorize/v16/Server/sqlite3
+/.vs/DictionaryMemorize/v15
+/.vs/DictionaryMemorize/v17
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/BusinessLogic/ManualDictionary.BusinessLogic/.vs
+/BusinessLogic/ManualDictionary.BusinessLogic/bin/Debug
+/.vs
+/BusinessLogic/ManualDictionary.BusinessLogic/obj/Debug
+/BusinessLogic/ManualDictionary.BusinessLogic.Contracts
+/BusinessLogic/Speech.BusinessLogic/.vs
+/BusinessLogic/Speech.BusinessLogic/obj/Debug
+/BusinessLogic/Speech.BusinessLogic.Contracts/.vs
