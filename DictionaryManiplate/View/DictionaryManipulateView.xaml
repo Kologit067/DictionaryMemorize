@@ -1,0 +1,779 @@
+﻿<Window x:Class="DictionaryManipulate.View.DictionaryManipulateView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:DictionaryManipulate.View"
+        Title="DictionaryManipulateView" Height="700" Width="1300" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded_1">
+    <Window.Resources>
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="CanUserAddRows" Value="False" />
+            <Setter Property="IsSynchronizedWithCurrentItem" Value="true" />
+            <Setter Property="AlternatingRowBackground" Value="#E0E5F5" />
+            <Setter Property="RowBackground" Value="#E5EEFF" />
+            <Setter Property="AlternationCount" Value="2" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Background" Value="#F8F8F8" />
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#D8E0D8" />
+        </Style>
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="#F0F5F0" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="5,2,5,2"/>
+        </Style>
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="#FAFAFA" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style x:Key="Answer" >
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=State}" Value="0">
+                    <Setter Property="Border.BorderBrush" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Work with texts">
+                <TabControl>
+                    <TabItem Header="Fields-Books">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid x:Name="dgBookFields" Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="LightBlue" RowBackground="#E5EEFF" AlternationCount="2">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="BookFields" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.SelectedItem>
+                                    <Binding Path="SelectedBookField" />
+                                </DataGrid.SelectedItem>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="FieldName" Binding="{Binding FieldName, Mode=OneWay}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid x:Name="dgBookFieldBooks" Grid.Column="0" Grid.Row="2" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="LightBlue" RowBackground="#E5EEFF" AlternationCount="2">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="BookFieldsBooks" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.SelectedItem>
+                                    <Binding Path="SelectedBookFieldBook" />
+                                </DataGrid.SelectedItem>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="BookName" Binding="{Binding BookName, Mode=OneWay}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="AuthorName" Binding="{Binding Author.AuthorName, Mode=OneWay}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid x:Name="dgBookFieldBookWords" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="LightBlue" RowBackground="#E5EEFF" AlternationCount="2">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="BookFieldsBookWords" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.SelectedItem>
+                                    <Binding Path="SelectedBookFieldBookWord" />
+                                </DataGrid.SelectedItem>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Word" Binding="{Binding Word, Mode=OneWay}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Count" Binding="{Binding Count, Mode=OneWay}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Authors-Books">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid x:Name="dgBookAuthors" Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="LightBlue" RowBackground="#E5EEFF" AlternationCount="2">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="BookAuthors" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.SelectedItem>
+                                    <Binding Path="SelectedBookAuthor" />
+                                </DataGrid.SelectedItem>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="AuthorName" Binding="{Binding AuthorName, Mode=OneWay}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid x:Name="dgBookAuthorsBooks" Grid.Column="0" Grid.Row="2" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="LightBlue" RowBackground="#E5EEFF" AlternationCount="2">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="BookAuthorsBooks" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.SelectedItem>
+                                    <Binding Path="SelectedBookAuthorBook" />
+                                </DataGrid.SelectedItem>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="BookName" Binding="{Binding BookName, Mode=OneWay}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="AuthorName" Binding="{Binding Author.AuthorName, Mode=OneWay}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid x:Name="dgBookAuthorsBookWords" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="LightBlue" RowBackground="#E5EEFF" AlternationCount="2">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="BookAuthorsBookWords" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.SelectedItem>
+                                    <Binding Path="SelectedBookAuthorBookWord" />
+                                </DataGrid.SelectedItem>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Word" Binding="{Binding Word, Mode=OneWay}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Count" Binding="{Binding Count, Mode=OneWay}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Fields">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid x:Name="dgWordFields" Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="LightBlue" RowBackground="#E5EEFF" AlternationCount="2">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="WordFields" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.SelectedItem>
+                                    <Binding Path="SelectedWordField" />
+                                </DataGrid.SelectedItem>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="FieldName" Binding="{Binding FieldName, Mode=OneWay}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid x:Name="dgWordFieldWords" Grid.Column="1" Grid.Row="1"  AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="LightBlue" RowBackground="#E5EEFF" AlternationCount="2">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="WordFieldsWords" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.SelectedItem>
+                                    <Binding Path="SelectedWordFieldWord" />
+                                </DataGrid.SelectedItem>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Word" Binding="{Binding Word, Mode=OneWay}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Count" Binding="{Binding Count, Mode=OneWay}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Total">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid x:Name="dgTotalWords" Grid.Column="0" Grid.Row="1"  AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="LightBlue" RowBackground="#E5EEFF" AlternationCount="2">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="TotalWords" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.SelectedItem>
+                                    <Binding Path="SelectedTotalWord" />
+                                </DataGrid.SelectedItem>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Word" Binding="{Binding Word, Mode=OneWay}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Count" Binding="{Binding Count, Mode=OneWay}"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+            <TabItem Header="Texts &amp; books processing">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Field" />
+                        <Label Grid.Row="1" Grid.Column="0" Content="Author" />
+                        <Label Grid.Row="2" Grid.Column="0" Content="Title" />
+                        <Label Grid.Row="3" Grid.Column="0" Content="Content" />
+                        <ComboBox Grid.Column="1" Grid.Row="0"  ItemsSource="{Binding Fields}"  Height="30" Margin="10,1,10,1"
+                          SelectedItem="{Binding SelectedField}" SelectedIndex="{Binding SelectedFieldindex}" >
+                            <ComboBox.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                    <Setter Property="FontSize" Value="10"/>
+                                    <Setter Property="Padding" Value="1"/>
+                                    <Setter Property="Margin" Value="1"/>
+                                    <Setter Property="Background" Value="#F8F8F8" />
+                                </Style>
+                            </ComboBox.Resources>
+                        </ComboBox>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=Author, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}" />
+                        <ToolBar Grid.Row="3" Grid.Column="1" Background="#CCD1CC">
+                            <Button Command="{Binding AddBookCommand}" ToolTip="Add Book">
+                                <Image Source="pack://application:,,,/Picture/Save_6530_32.bmp" />
+                            </Button>
+                        </ToolBar>
+
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Margin="7" Text="{Binding Path=Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"
+              AcceptsReturn="True"   VerticalScrollBarVisibility="Visible"  />
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Dictionaries">
+                <TabControl>
+                    <TabItem Header="Words">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Dictionary"/>
+                                <ComboBox Grid.Column="1" Grid.Row="0"  ItemsSource="{Binding DictionaryList}"  Focusable="False"
+                                          SelectedItem="{Binding WordSelectedDictionary}"/>
+                                <Label Grid.Column="2" Content="Word"/>
+                                <TextBox Grid.Column="3" Text="{Binding WordSearchInDictionary}"/>
+                                <Button Grid.Row="0" Grid.Column="4" Content="Serch" Command="{Binding WordSearchInDictionaryCommand}"/>
+                                <Button Grid.Row="0" Grid.Column="5" Content="Show books" Command="{Binding WordSearchShowBooksCommand}"/>
+                                <Button Grid.Row="0" Grid.Column="6" Content="Show books Ext" Command="{Binding WordSearchShowBooksExtCommand}"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <DataGrid x:Name="dgWordFromDictionaryList" Grid.Column="0"  AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="#E0E5F5" RowBackground="#E5EEFF" AlternationCount="2">
+                                    <DataGrid.ItemsSource>
+                                        <Binding Path="WordFromDictionaryList" />
+                                    </DataGrid.ItemsSource>
+                                    <DataGrid.SelectedItem>
+                                        <Binding Path="SelectedWordFromDictionary" />
+                                    </DataGrid.SelectedItem>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Native" Binding="{Binding Native, Mode=OneWay}"></DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBox Grid.Row="0" Text="{Binding WordFromDictionaryList/ShortTranslation}" Margin="2,12,1.8,56.4" Grid.RowSpan="2" />
+                                    <TextBox Grid.Row="1" Text="{Binding WordFromDictionaryList/Translation}" Height="60" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"/>
+                                    <DataGrid Grid.Row="2"  AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true" AlternatingRowBackground="#D5F3FF" RowBackground="#E5FFFF" AlternationCount="2">
+                                        <DataGrid.ItemsSource>
+                                            <Binding Path="WordInBooksList" />
+                                        </DataGrid.ItemsSource>
+                                        <DataGrid.SelectedItem>
+                                            <Binding Path="SelectedWordInBooks" />
+                                        </DataGrid.SelectedItem>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="BookName" Binding="{Binding BookName, Mode=OneWay}"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="AuthorName" Binding="{Binding AuthorName, Mode=OneWay}"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="FieldName" Binding="{Binding FieldName, Mode=OneWay}"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="Count" Binding="{Binding Count, Mode=OneWay}"></DataGridTextColumn>
+                                            <DataGridTextColumn Header="CountRelation" Binding="{Binding CountRelation, Mode=OneWay}"></DataGridTextColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Import">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition  Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Content="Dictionary Process" />
+                            <Label Grid.Row="1" Grid.Column="0" Content="Process Texts From DataBase" />
+                            <Label Grid.Row="2" Grid.Column="0" Content="Process new Texts From DataBase" />
+                            <Label Grid.Row="3" Grid.Column="0" Content="Save custom doctionarure into DataBase" />
+                            <Button Grid.Row="0" Grid.Column="2" Command="{Binding AddDictionaryCommand}" ToolTip="Dictionary Process">
+                                <Image Source="pack://application:,,,/Picture/Saveall_6518_24.bmp" />
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="2" Command="{Binding BooksProcessCommand}" ToolTip="TextProcess">
+                                <Image Source="pack://application:,,,/Picture/Launch_7018_32.bmp" />
+                            </Button>
+                            <Button Grid.Row="2" Grid.Column="2" Command="{Binding NewBooksProcessCommand}" ToolTip="NewTextProcess">
+                                <Image Source="pack://application:,,,/Picture/Launch_7018_32.bmp" />
+                            </Button>
+                            <Button Grid.Row="3" Grid.Column="2" Command="{Binding SaveCustomdoctionarureCommand}" ToolTip="Save custom doctionarure into DataBase">
+                                <Image Source="pack://application:,,,/Picture/StepOver_6328_32.bmp" />
+                            </Button>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+            <TabItem Header="Define text statistics">
+                <Grid DataContext="{Binding TextProcessModel}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0">
+                            <Label DockPanel.Dock="Left" Content="text to process" VerticalAlignment="Center"/>
+                            <Button DockPanel.Dock="Right" Content="GO" Command="{Binding TextProcessCommand}" Padding="10,0,10,0"/>
+                            <TextBlock/>
+                        </DockPanel>
+                        <TextBox Grid.Row="1" Text="{Binding TextToProcess}" TextWrapping="Wrap" AcceptsReturn="True"  />
+                    </Grid>
+                    <DataGrid Grid.Column="1" Grid.Row="0" AutoGenerateColumns="False" CanUserAddRows="False"  IsSynchronizedWithCurrentItem="true">
+                        <DataGrid.ItemsSource>
+                            <Binding Path="WordCountList" />
+                        </DataGrid.ItemsSource>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Word" Binding="{Binding Word}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Count" Binding="{Binding Count}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="New Dictionary creating">
+                <TabControl SelectedIndex="{Binding NewDictionaryCreatingTabIndex}">
+                    <TabItem Header="Prepare">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <RadioButton x:Name="cbIsDictionaryFromFields" GroupName="SourceForDictonary" Content="Fields" 
+                                             IsChecked="{Binding Path=IsDictionaryFromFields}" 
+                                             Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
+                                <DataGrid x:Name="dgFieldsForDictionary" Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true">
+                                    <DataGrid.ItemsSource>
+                                        <Binding Path="FieldsForDictionary" />
+                                    </DataGrid.ItemsSource>
+                                    <DataGrid.SelectedItem>
+                                        <Binding Path="SelectedFieldForDictionary" />
+                                    </DataGrid.SelectedItem>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="FieldName" Binding="{Binding FieldName, Mode=OneWay}"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="IsSel" Binding="{Binding IsSelected, Mode=TwoWay}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <RadioButton x:Name="cbIsDictionaryFromAuthors" GroupName="SourceForDictonary" Content="Authors" 
+                                             IsChecked="{Binding Path=IsDictionaryFromAuthors}" 
+                                             Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
+                                <DataGrid x:Name="dgAuthorsForDictionary" Grid.Column="0" Grid.Row="3" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true">
+                                    <DataGrid.ItemsSource>
+                                        <Binding Path="AuthorsForDictionary" />
+                                    </DataGrid.ItemsSource>
+                                    <DataGrid.SelectedItem>
+                                        <Binding Path="SelectedAuthorForDictionary" />
+                                    </DataGrid.SelectedItem>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="AuthorName" Binding="{Binding AuthorName, Mode=OneWay}"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="IsSel" Binding="{Binding IsSelected, Mode=TwoWay}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" Command="{Binding AddCandidateWordsCommand}" ToolTip="Add Candidate Words">
+                                        <Image Source="pack://application:,,,/Picture/AddExistingItem_6269_32.bmp" />
+                                    </Button>
+                                    <Button Grid.Column="1" Command="{Binding AddCandidateWordsfromGroupCommand}" ToolTip="Add Candidate Words from Group">
+                                        <Image Source="pack://application:,,,/Picture/AddGroup_32.bmp" />
+                                    </Button>
+                                    <Button Grid.Column="2" Command="{Binding SetRateAndTopCommand}" ToolTip="Set Rate">
+                                        <Image Source="pack://application:,,,/Picture/FillTool_204_32.bmp" />
+                                    </Button>
+                                    <Button Grid.Column="3" Command="{Binding CreateDictionaryForProcessCommand}" ToolTip="Create previous dictionary">
+                                        <Image Source="pack://application:,,,/Picture/NavigateForward_6271_32.bmp" />
+                                    </Button>
+                                </Grid>
+                                <DataGrid x:Name="dgBooksForDictionary" Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true">
+                                    <DataGrid.ItemsSource>
+                                        <Binding Path="BooksForDictionary" />
+                                    </DataGrid.ItemsSource>
+                                    <DataGrid.SelectedItem>
+                                        <Binding Path="SelectedBookForDictionary" />
+                                    </DataGrid.SelectedItem>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="BookName" Binding="{Binding BookName, Mode=OneWay}"></DataGridTextColumn>
+                                        <DataGridCheckBoxColumn Header="IsSel" Binding="{Binding IsSelected, Mode=TwoWay}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <RadioButton x:Name="cbIsTopSelectWordDictionary" GroupName="SelectionWordDictionary" Content="Top" 
+                                             IsChecked="{Binding Path=IsTopSelectWordDictionary}" 
+                                             Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
+                                    <RadioButton x:Name="cbIsRateSelectWordDictionary" GroupName="SelectionWordDictionary" Content="Rate" 
+                                             IsChecked="{Binding Path=IsRateSelectWordDictionary}" 
+                                             Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding NewDictionaryCreatingTop}" />
+                                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewDictionaryCreatingRate}" />
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0"/>
+                                    <Button Grid.Column="1"/>
+                                </Grid>
+                                <DataGrid x:Name="dgWordsForDictionary" Grid.Column="0" Grid.Row="2" AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible">
+                                    <DataGrid.ItemsSource>
+                                        <Binding Path="LearnCandidatWords" />
+                                    </DataGrid.ItemsSource>
+                                    <DataGrid.SelectedItem>
+                                        <Binding Path="SelectedWordForDictionary" />
+                                    </DataGrid.SelectedItem>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Native" Binding="{Binding Native, Mode=OneWay}"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="Count" Binding="{Binding Count, Mode=OneWay}"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="ShortTranslation" Binding="{Binding ShortTranslation, Mode=OneWay}" MaxWidth="200"></DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Manual prepare">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="6" />
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="43"/>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Column="0" Content="_Word" Grid.ColumnSpan="3" Target="{Binding ElementName=txtWordSearchInDictionaryManual}"/>
+                                <TextBox x:Name="txtWordSearchInDictionaryManual" Grid.Column="3" 
+                                         Text="{Binding WordSearchInDictionaryManual, UpdateSourceTrigger=PropertyChanged}" 
+                                         VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                         IsEnabled="{Binding IsShortDictionaryAsTreeReady}" PreviewKeyDown="TextBox_KeyDown_1" Margin="2,7">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="PreviewKeyDown">
+                                            <command:EventToCommand Command="{Binding WordSearchInDictionaryManualKeyDownCommand}" 
+                                                                    PassEventArgsToCommand="True"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                                <Button Grid.Column="4" Command="{Binding AddCandidateWordManualCommand}" ToolTip="Add Word to Candidate List" Margin="0,4,0,5">
+                                    <Image Source="pack://application:,,,/Picture/AddGroup_32.bmp" />
+                                </Button>
+                                <Button Grid.Column="5" Command="{Binding ProcessTextAddCandidateWordsCommand}" ToolTip="Process Text and Add Word to Candidate List" Margin="0,4,0,5">
+                                    <Image Source="pack://application:,,,/Picture/Services.bmp" />
+                                </Button>
+                                <Button Grid.Column="6" Command="{Binding ProcessListAddCandidateWordsCommand}" ToolTip="Process Text and Add Word to Candidate List" Margin="0,4,0,5">
+                                    <Image Source="pack://application:,,,/Picture/Services.bmp" />
+                                </Button>
+                                <Button Grid.Column="7" Command="{Binding ProcessList2AddCandidateWordsCommand}" ToolTip="Process Text and Add Word to Candidate List" Margin="0,4,0,5">
+                                    <Image Source="pack://application:,,,/Picture/Services.bmp" />
+                                </Button>
+                                <Button Grid.Column="8" Command="{Binding ClearCandidateWordsCommand}" ToolTip="Process Text and Add Word to Candidate List" Margin="0,4,0,5">
+                                    <Image Source="pack://application:,,,/Picture/Excludedfrombuild_7250_32.bmp" />
+                                </Button>
+                                <Button Grid.Column="9" Command="{Binding CreateManualDictionaryForProcessCommand}" ToolTip="Create Dictionary for further Work" Margin="0,4,0,5">
+                                    <Image Source="pack://application:,,,/Picture/NavigateForward_6271_32.bmp" />
+                                </Button>
+                                <Button Grid.Column="10
+                                        " Command="{Binding CreateManualDictionaryWithoutClearingCommand}" ToolTip="Create Dictionary for further Work Without Clearing" Margin="0,4,0,5">
+                                    <Image Source="pack://application:,,,/Picture/NavigateForward_6271_32.bmp" />
+                                </Button>
+                                <ListBox x:Name="lbFoundedWords" Grid.Column="3" Grid.Row="1" 
+                                         ItemsSource="{Binding FoundedWords}"
+                                         SelectedItem="{Binding SelectedFoundedWord, Mode=TwoWay}" >
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="PreviewKeyDown">
+                                            <command:EventToCommand Command="{Binding Mode=OneWay, Path=SelectFoundedWordsCommand}" PassEventArgsToCommand="True" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Native}" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                            <Grid Grid.Column="0" Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Column="0" Grid.Row="0" Content="Short translate"/>
+                                <Label Grid.Column="0" Grid.Row="1" Content="Translate"/>
+                                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding SelectedWordSearchInDictionary.ShortTranslation}" />
+                                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SelectedWordSearchInDictionary.Translation}" MinHeight="120" MaxHeight="220" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"/>
+                            </Grid>
+                            <GroupBox Grid.Column="0" Grid.Row="3" >
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="6" Text="Text" Padding="3,0,3,0" Margin="3,0,3,0" VerticalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding IsSpaceAsSeparatorManualVocabulary}" Content="Space as separator"/>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <TextBox  Text="{Binding TextForManualProcessing}"  AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"/>
+                            </GroupBox>
+                            <DataGrid x:Name="dgWordsForDictionaryManual" Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible">
+                                <DataGrid.ItemsSource>
+                                    <Binding Path="LearnCandidatManualWords" />
+                                </DataGrid.ItemsSource>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Native" Binding="{Binding Native, Mode=OneWay}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Count" Binding="{Binding Count, Mode=OneWay}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="ShortTranslation" Binding="{Binding ShortTranslation, Mode=OneWay}" MaxWidth="200"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Work with dictionary">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition />
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Command="{Binding CreateDictionaryFileCommand}" ToolTip="Create dictionary file">
+                                    <Image Source="pack://application:,,,/Picture/Generatedfile_6428_24.bmp" />
+                                </Button>
+                                <Button Grid.Column="1" Command="{Binding CreateExceptionListCommand}" ToolTip="Create exception list">
+                                    <Image Source="pack://application:,,,/Picture/Exception-Shortcut_605_32.bmp" />
+                                </Button>
+                                <Button Grid.Column="2" Command="{Binding FilterWordDictionaryCreateCommand}" ToolTip="Filter">
+                                    <Image Source="pack://application:,,,/Picture/FilteredObject_13400_16x_32.bmp" />
+                                </Button>
+                                <Button Grid.Column="3" Command="{Binding FilterDerivationOnlyWordDictionaryCreateCommand}" ToolTip="Filter Only Derivation">
+                                    <Image Source="pack://application:,,,/Picture/Exportfilter_10563_32.bmp" />
+                                </Button>
+                                <Button Grid.Column="4" Command="{Binding ClearFilterWordDictionaryCreateCommand}" ToolTip="Clear Filter">
+                                    <Image Source="pack://application:,,,/Picture/DeleteFilter_5563_32.bmp" />
+                                </Button>
+                                <Button Grid.Column="5" Command="{Binding RemoveUnproperPiecesCommand}" ToolTip="Remove unproper pieces">
+                                    <Image Source="pack://application:,,,/Picture/Excludedfrombuild_7250_32.bmp" />
+                                </Button>
+                                <Button Grid.Column="6" Command="{Binding NativeIntoClipboardCommand}" ToolTip="Word into Clipboard">
+                                    <Image Source="pack://application:,,,/Picture/SelectRow_362_32.bmp" />
+                                </Button>
+                                <Button Grid.Column="7" Command="{Binding ReadManualDictionaryfromFileCommand}" ToolTip="Read from file">
+                                    <Image Source="pack://application:,,,/Picture/OpenFileDialog_692.png" />
+                                </Button>
+                                <TextBlock Grid.Column="8" Text="New dictionary name" Margin="10,2,10,2"/>
+                                <TextBox Grid.Column="9" Text="{Binding NewDictionaryName, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Dictionary" HorizontalAlignment="Center"/>
+                                <Label Content="Exception" Grid.Column="2" HorizontalAlignment="Center"/>
+                                <DataGrid x:Name="dgWordDictionaryCreate" Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true">
+                                    <DataGrid.ItemsSource>
+                                        <Binding Path="WordDictionaryCreate" />
+                                    </DataGrid.ItemsSource>
+                                    <DataGrid.SelectedItem>
+                                        <Binding Path="SelectedWordDictionaryCreate" />
+                                    </DataGrid.SelectedItem>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Word" Binding="{Binding Native, Mode=OneWay}"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="Short Translation" Binding="{Binding ShortTranslation, Mode=OneWay}"></DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <Grid Grid.Column="1"  Grid.Row="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Button Grid.Row="0" Content="->" Command="{Binding FromDictionaryToExceptionCommand}" Margin="2"/>
+                                    <Button Grid.Row="1" Content=">>" Command="{Binding FromDictionaryToExceptionAllCommand}" Margin="2"/>
+                                    <Button Grid.Row="2" Content="&lt;-" Command="{Binding FromExceptionToDictionaryCommand}" Margin="2"/>
+                                    <Button Grid.Row="3" Content="&lt;&lt;" Command="{Binding FromExceptionToDictionaryAllCommand}" Margin="2"/>
+                                </Grid>
+                                <DataGrid x:Name="dgWordDictionaryException" Grid.Column="2" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" 
+                                      IsSynchronizedWithCurrentItem="true">
+                                    <DataGrid.ItemsSource>
+                                        <Binding Path="WordDictionaryException" />
+                                    </DataGrid.ItemsSource>
+                                    <DataGrid.SelectedItem>
+                                        <Binding Path="SelectedWordDictionaryException" />
+                                    </DataGrid.SelectedItem>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Word" Binding="{Binding Native, Mode=OneWay}"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="Short Translation" Binding="{Binding ShortTranslation, Mode=OneWay}"></DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" Content="Translation" />
+                                <Label Grid.Row="1" Grid.Column="0" Content="Short" />
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding WordDictionaryCreate/Translation}" MaxHeight="100" HorizontalScrollBarVisibility="Auto"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding WordDictionaryCreate/ShortTranslation}" />
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

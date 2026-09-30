@@ -1,0 +1,115 @@
+﻿<Window x:Class="DictionarySpeech.View.DictionarySpeechView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DictionarySpeech.csproj"
+        mc:Ignorable="d"
+        Title="Dictionary Speech" Height="600" Width="1300"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Button ToolTip="Add Group" Command="{Binding AddSpeechGroupCommand}" Style="{StaticResource ButtonImage}">
+                    <Image Source="Pictures\edit_add.png"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+                <Button ToolTip="Delete Group" Command="{Binding DeleteSpeechGroupCommand}"  Style="{StaticResource ButtonImage}">
+                    <Image Source="Pictures\edit_remove.png"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+                <Button ToolTip="Add Phrase" Command="{Binding AddSpeechPhraseCommand}"  Style="{StaticResource ButtonImage}">
+                    <Image Source="Pictures\folder_new.png"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+                <Button ToolTip="Insert after" Command="{Binding InsertSpeechPhraseCommand}" Style="{StaticResource ButtonImage}">
+                    <Image Source="Pictures\new_window.png"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+                <Button ToolTip="Delete Phrase" Command="{Binding DeleteSpeechPhraseCommand}" Style="{StaticResource ButtonImage}">
+                    <Image Source="Pictures\edit_remove ----.png"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+                <Button ToolTip="Play" Command="{Binding PlayPhraseCommand}" Style="{StaticResource ButtonImage}">
+                    <Image Source="Pictures\mp3.png"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+                <Button ToolTip="Play List" Command="{Binding PlayPhrasesListCommand}" Style="{StaticResource ButtonImage}">
+                    <Image Source="Pictures\multimedia2.png"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+                <Label Content="_Pause" Target="{Binding ElementName=txtSpeechPause}" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+                <TextBox x:Name="txtSpeechPause" Width="100" Text="{Binding SpeechPause}" />
+                <Label  Content="_Repeat"  Target="{Binding ElementName=txtSpeechRepeat}" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+                <TextBox x:Name="txtSpeechRepeat" Width="100" Text="{Binding SpeechRepeat}" />
+                <CheckBox Width="100" IsChecked="{Binding IsSpeechCycle}" Content="Is Cycle" Margin="10,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                <CheckBox Width="100" IsChecked="{Binding IsOnlySelected}" Content="Only Selected" Margin="10,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                <CheckBox Width="100" IsChecked="{Binding IsCustomPauses}" Content="Custom Pauses" Margin="10,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                <Button ToolTip="Stop" Command="{Binding StopSpeechCommand}" >
+                    <Image Source="Pictures\player_stop.png"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+                <Button ToolTip="Save" Command="{Binding SaveDataCommand}" >
+                    <Image Source="Pictures\Saveall_6518.png"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+                <Button ToolTip="Import data" Command="{Binding ImportDataCommand}" >
+                    <Image Source="Pictures\AddTable_5632_32.bmp"  Style="{StaticResource ImageInButton}"/>
+                </Button>
+            </StackPanel>
+            <Expander Grid.Row="1" Header="Additional setting" IsExpanded="{Binding IsAdditionalSettingExpanded}">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox ItemsSource="{Binding InstalledVoices}" DisplayMemberPath="VoiceInfo.Name" SelectedItem="{Binding SelectedInstalledVoice, Mode=TwoWay}"  Margin="4" />
+                    <GroupBox x:Name="gbRatio" Grid.Row="0" Grid.Column="1" Header="Ratio" Width="200">
+                        <Slider  Template="{StaticResource HorizontalSlider}" x:Name="slRatio" Minimum="-10" Maximum="10" 
+                                     Width="{Binding ElementName=gbRatio,Path=ActualWidth}"  Orientation="Horizontal" 
+                                     HorizontalAlignment="Left" 
+                                    TickPlacement="BottomRight"  
+                                    AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" TickFrequency="1">
+                            <Slider.Value>
+                                <Binding Path="SpeedRatio"/>
+                            </Slider.Value>
+                        </Slider>
+                    </GroupBox>
+                    <CheckBox IsChecked="{Binding IsPauseEqualDuration}" Content="Is Pause Equal Duration" />
+                    <Label Content="P_aragraph Pause" Target="{Binding ElementName=txtParagraphPause}" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+                    <TextBox x:Name="txtParagraphPause" Width="100" Text="{Binding ParagraphPause}" />
+                    <Label Content="_Sentence Pause" Target="{Binding ElementName=txtSentencePause}" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+                    <TextBox x:Name="txtSentencePause" Width="100" Text="{Binding SentencePause}" />
+                </StackPanel>
+            </Expander>
+            <ListBox Grid.Row="2" ItemsSource="{Binding SpeechGroups}" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedSpeechGroup}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding Title}" MinWidth="500" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <GridSplitter Grid.Row="3" Grid.Column="0"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="3" />
+            <ListBox x:Name="lbSpeechPhrase" Grid.Row="4" ItemsSource="{Binding SpeechGroups/SpeechPhrases}" 
+                         IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedSpeechPhrase}" SelectedIndex="{Binding SelectedSpeechIndexPhrase}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsChecked}" />
+                            <TextBox Text="{Binding UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=Phrase }" MinWidth="500" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Expander Grid.Row="5" Header="Eows for adding" IsExpanded="{Binding IsListPhraseExpanded}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Width="150" Content="Add Phrase" Command="{Binding AddListOfSpeechPhraseCommand}" HorizontalAlignment="Left"/>
+                        <Button Width="150" Content="Add Phrase As One" Command="{Binding AddSpeechPhraseAsOneCommand}" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                    <TextBox Text="{Binding ListOfSpeechPhrase, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap" Height="300"/>
+                </StackPanel>
+            </Expander>
+            <TextBox Grid.Row="6" Text="{Binding OperationResult}"/>
+        </Grid>
+       
+    </Grid>
+</Window>
