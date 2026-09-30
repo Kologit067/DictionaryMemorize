@@ -279,7 +279,6 @@ __pycache__/
 /BusinessLogic/ManualDictionary.BusinessLogic/bin/Debug
 /.vs
 /BusinessLogic/ManualDictionary.BusinessLogic/obj/Debug
-/BusinessLogic/ManualDictionary.BusinessLogic.Contracts
 /BusinessLogic/Speech.BusinessLogic/.vs
 /BusinessLogic/Speech.BusinessLogic/obj/Debug
 /BusinessLogic/Speech.BusinessLogic.Contracts/.vs
